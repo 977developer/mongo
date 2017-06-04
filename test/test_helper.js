@@ -15,8 +15,14 @@ before((done) => {
 //Hook that runs before each test
 //Using here to clear data before each test
 beforeEach((done) => {
-  mongoose.connection.collections.users.drop(() => {
-    //Ready to run the next test
-    done();
+
+//Remember : blogPosts gets normalized to blogposts by MongoDB
+  const { users, comments, blogposts } = mongoose.connection.collections;
+  users.drop(() => {
+    comments.drop(() => {
+      blogposts.drop(() => {
+        done();
+      });
+    });
   });
 });
