@@ -32,7 +32,7 @@ describe('Association', () => {
   });
 
 
-  it.only('Save a full relation graph', (done) => {
+  it('Save a full relation graph', (done) => {
     User.findOne({ name : 'Joe' })
       .populate({
         path     : 'blogPosts',

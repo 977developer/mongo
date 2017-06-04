@@ -21,8 +21,19 @@ const UserSchema = new Schema({
 });
 
 //Adding virtual properties to User Schema
+//Arrow function not used here because this would be different value
 UserSchema.virtual('postCount').get(function(){
   return this.posts.length;
+});
+
+//Middleware before remove
+//Arrow function not used here because this would be different value
+UserSchema.pre('remove', function(next){
+  const BlogPost = mongoose.model('blogPost');
+  //Here : this === joe
+  //In operator
+  BlogPost.remove({ _id : { $in : this.blogPosts } })
+    .then(() => next()); //Once next is called another middleware is called
 });
 
 const User     = mongoose.model('user', UserSchema);
