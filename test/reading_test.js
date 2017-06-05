@@ -3,11 +3,16 @@ const User    = require('../src/user');
 
 
 describe('Reading users out of the database', () => {
-  let joe;
+  let joe, maria, alex, zach;
   //Insert a record before finding because the main file clears records everytime
   beforeEach((done) => {
+    alex = new User({ name: 'Alex' });
     joe = new User({ name: 'Joe' });
-    joe.save()
+    maria = new User({ name: 'Maria' });
+    zach = new User({ name: 'Zach' });
+
+    //To call done once all the save are done
+    Promise.all([alex.save(), joe.save(), maria.save(), zach.save()])
       .then(() => done());
   });
 
@@ -28,6 +33,17 @@ describe('Reading users out of the database', () => {
       })
       .catch((err) => {
         console.log('Mocha Error ===> ', err);
+        done();
+      });
+  });
+
+  //Pagination test
+  it.only('can skip and limit the result set', (done) => {
+    User.find({}).sort({ name : 1 }).skip(1).limit(2)
+      .then((users) => {
+        assert(users.length === 2);
+        assert(users[0].name === "Joe");
+        assert(users[1].name === "Maria");
         done();
       });
   });

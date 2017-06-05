@@ -19,7 +19,7 @@ describe('Middleware', () => {
       .then(() => done());
   });
 
-  it.only('users clean up dangling blogposts on remove', (done) => {
+  it('users clean up dangling blogposts on remove', (done) => {
     joe.remove()
       .then(() => BlogPost.count())
       .then((count) => {
@@ -28,4 +28,3 @@ describe('Middleware', () => {
       });
   });
 });
- 
